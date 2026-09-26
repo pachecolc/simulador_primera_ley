@@ -82,7 +82,7 @@ T=\frac{217}{R^{0.13}}-151
 - cálculo manual vs simulador;
 - registro de múltiples mediciones con `st.session_state`;
 - exportación a **CSV** y **Excel**;
-- guía de laboratorio y guía docente incluidas.
+- guía de laboratorio y guía docente incluidas en Markdown y Word (.docx).
 
 ---
 
@@ -109,7 +109,9 @@ simulador_primera_ley/
 ├── requirements.txt
 ├── README.md
 ├── GUIA_LABORATORIO.md
+├── GUIA_LABORATORIO.docx
 ├── GUIA_DOCENTE.md
+├── GUIA_DOCENTE.docx
 └── assets/
     ├── aparato_equivalente_calor.png
     ├── energia_trabajo_a_calor.png

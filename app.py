@@ -18,8 +18,10 @@ st.set_page_config(
 
 BASE_DIR = Path(__file__).resolve().parent
 ASSETS = BASE_DIR / "assets"
-GUIDE_STUDENT = BASE_DIR / "GUIA_LABORATORIO.md"
-GUIDE_TEACHER = BASE_DIR / "GUIA_DOCENTE.md"
+GUIDE_STUDENT_MD = BASE_DIR / "GUIA_LABORATORIO.md"
+GUIDE_TEACHER_MD = BASE_DIR / "GUIA_DOCENTE.md"
+GUIDE_STUDENT_DOCX = BASE_DIR / "GUIA_LABORATORIO.docx"
+GUIDE_TEACHER_DOCX = BASE_DIR / "GUIA_DOCENTE.docx"
 
 # Constantes y parametros usados por la guia / simulador
 G = 9.81                  # m/s^2
@@ -61,6 +63,11 @@ def show_asset(filename: str, caption: str):
 def read_text_file(path: Path):
     if path.exists():
         return path.read_text(encoding="utf-8")
+    return None
+
+def read_binary_file(path: Path):
+    if path.exists():
+        return path.read_bytes()
     return None
 
 
@@ -527,29 +534,35 @@ with tab_log:
 
 with tab_guide:
     st.markdown("### Guía de laboratorio del estudiante")
-    guide_text = read_text_file(GUIDE_STUDENT)
+    guide_text = read_text_file(GUIDE_STUDENT_MD)
+    student_docx = read_binary_file(GUIDE_STUDENT_DOCX)
+    teacher_docx = read_binary_file(GUIDE_TEACHER_DOCX)
     if guide_text:
         g1, g2 = st.columns([1, 1])
-        g1.download_button(
-            "Descargar GUIA_LABORATORIO.md",
-            data=guide_text.encode("utf-8"),
-            file_name="GUIA_LABORATORIO.md",
-            mime="text/markdown",
-            use_container_width=True,
-        )
-        teacher_text = read_text_file(GUIDE_TEACHER)
-        if teacher_text:
-            g2.download_button(
-                "Descargar GUIA_DOCENTE.md",
-                data=teacher_text.encode("utf-8"),
-                file_name="GUIA_DOCENTE.md",
-                mime="text/markdown",
+        if student_docx:
+            g1.download_button(
+                "Descargar GUIA_LABORATORIO.docx",
+                data=student_docx,
+                file_name="GUIA_LABORATORIO.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 use_container_width=True,
             )
+        else:
+            g1.warning("No se encontró GUIA_LABORATORIO.docx.")
+        if teacher_docx:
+            g2.download_button(
+                "Descargar GUIA_DOCENTE.docx",
+                data=teacher_docx,
+                file_name="GUIA_DOCENTE.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                use_container_width=True,
+            )
+        else:
+            g2.warning("No se encontró GUIA_DOCENTE.docx.")
         st.divider()
         st.markdown(guide_text)
     else:
-        st.warning("No se encontró GUIA_LABORATORIO.md en la carpeta del proyecto.")
+        st.warning("No se encontró GUIA_LABORATORIO.md en la carpeta del proyecto para mostrarla en pantalla.")
 
 st.divider()
 st.caption(
